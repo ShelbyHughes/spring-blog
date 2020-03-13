@@ -26,7 +26,7 @@ public class MathController {
 
     @GetMapping("/divide/{number}/by/{numbertwo}")
     @ResponseBody
-    public String divide(@PathVariable int number, @PathVariable int numbertwo){
+    public String divide(@PathVariable float number, @PathVariable float numbertwo){
         return number + " % " +  numbertwo + " = " + (number/numbertwo);
     }
 }
