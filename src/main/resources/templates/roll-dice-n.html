@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:replace="partials/header :: head">
+    <title>Roll Dice</title>
 </head>
 <body>
+<nav th:replace="partials/navbar :: navbar"/>
 <h1>Dice rolled: </h1>
 <div th:each="die : ${dice}">
     <p th:text="${die}" />
@@ -12,5 +12,6 @@
 <h1>Your guess: </h1> <span th:text="${guess}"></span>
 <p><span th:text="${resultMessage}"></span></p>
 <a th:href="@{/roll-dice}">Guess Again</a>
+<footer th:replace="partials/footer :: footer"/>
 </body>
 </html>
