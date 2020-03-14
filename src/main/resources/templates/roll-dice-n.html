@@ -5,8 +5,11 @@
     <title>Title</title>
 </head>
 <body>
+<h1>Dice rolled: </h1>
+<div th:each="die : ${dice}">
+    <p th:text="${die}" />
+</div>
 <h1>Your guess: </h1> <span th:text="${guess}"></span>
-<h1>Dice rolled: </h1> <span th:text="${rolled}"></span>
 <p><span th:text="${resultMessage}"></span></p>
 <a th:href="@{/roll-dice}">Guess Again</a>
 </body>
