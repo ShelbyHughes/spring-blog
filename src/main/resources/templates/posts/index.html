@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/header :: head">
+    <title>All Posts</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"/>
+<div th:each="post : ${posts}">
+    <h1 th:text="${post.getTitle()}" />
+    <p th:text="${post.getBody()}"/>
+</div>
+<footer th:replace="partials/footer :: footer"/>
+</body>
+</html>
