@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/header :: head">
+    <title>Fruit</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"/>
+<h1>Fruit Basket</h1>
+<ul>
+    <li th:each="fruit : ${fruitBasket}">
+        <p th:text="${fruit}" />
+        <p th:if='${fruit.equals("pineapple")}' > This is my favorite </p>
+    </li>
+</ul>
+<footer th:replace="partials/footer :: footer"/>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="partials/header :: head">
+    <title>Roll Dice</title>
+</head>
+<body>
+
+<nav th:replace="partials/navbar :: navbar"/>
+<h1><span th:text="${welcome}"></span></h1>
+
+<a th:href="@{/roll-dice/1}">1</a>
+<a th:href="@{/roll-dice/2}">2</a>
+<a th:href="@{/roll-dice/3}">3</a>
+<a th:href="@{/roll-dice/4}">4</a>
+<a th:href="@{/roll-dice/5}">5</a>
+<a th:href="@{/roll-dice/6}">6</a>
+
+<footer th:replace="partials/footer :: footer"/>
+</body>
+</html>

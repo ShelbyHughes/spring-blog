@@ -1,20 +1,34 @@
 package com.codeup.springblog.controller;
 
+import com.codeup.springblog.model.Post;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class PostController {
-    @RequestMapping(path = "/posts", method = RequestMethod.GET)
-    @ResponseBody
-    public String posts() {
-        return "posts index page";
+    @GetMapping("/posts")
+    public String posts(Model model) {
+        model.addAttribute("title", "View All Posts");
+        ArrayList<Post> posts = new ArrayList<>();
+        posts.add(new Post(1, "This is a title", "Feeling hungry"));
+        posts.add(new Post(2, "This is a thoughtful title", "Do spiders get grossed out by humans?"));
+        model.addAttribute("posts", posts);
+        return "posts/index";
     }
 
-    @RequestMapping(path = "/posts/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public String post(@PathVariable int id) {
-        return "view an individual post";
+    @GetMapping("/posts/{id}")
+    public String post(Model model, @PathVariable long id) {
+        model.addAttribute("title", "View Post");
+
+        Post thisPost = new Post(id, "This is a single post", "Dogs are the best creatures on planet Earth!!!");
+        model.addAttribute("postId", thisPost.getId());
+        model.addAttribute("postTitle", thisPost.getTitle());
+        model.addAttribute("postBody", thisPost.getBody());
+        return "posts/show";
     }
 
     @RequestMapping(path = "/posts/create", method = RequestMethod.GET)
