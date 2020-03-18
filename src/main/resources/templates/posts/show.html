@@ -5,9 +5,9 @@
 </head>
 <body>
 <nav th:replace="partials/navbar :: navbar"/>
-<h3 th:text="${postId}"/>
-<h1 th:text="${postTitle}" />
-<p th:text="${postBody}" />
+<h3 th:text="${post.id}"/>
+<h1 th:text="${post.title}" />
+<p th:text="${post.body}" />
 <footer th:replace="partials/footer :: footer"/>
 </body>
 </html>

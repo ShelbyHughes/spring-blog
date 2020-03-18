@@ -1,36 +1,73 @@
 package com.codeup.springblog.controller;
 
 import com.codeup.springblog.model.Post;
+import com.codeup.springblog.repositiories.PostRepo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class PostController {
+
+    private PostRepo postDao;
+
+    public PostController(PostRepo postDao){
+        this.postDao = postDao;
+    }
+
     @GetMapping("/posts")
     public String posts(Model model) {
         model.addAttribute("title", "View All Posts");
-        ArrayList<Post> posts = new ArrayList<>();
-        posts.add(new Post(1, "This is a title", "Feeling hungry"));
-        posts.add(new Post(2, "This is a thoughtful title", "Do spiders get grossed out by humans?"));
-        model.addAttribute("posts", posts);
+        List<Post> post = postDao.findAll();
+        model.addAttribute("posts", post);
         return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
     public String post(Model model, @PathVariable long id) {
         model.addAttribute("title", "View Post");
-
-        Post thisPost = new Post(id, "This is a single post", "Dogs are the best creatures on planet Earth!!!");
-        model.addAttribute("postId", thisPost.getId());
-        model.addAttribute("postTitle", thisPost.getTitle());
-        model.addAttribute("postBody", thisPost.getBody());
+        Post post = postDao.findById(id);
+        model.addAttribute("post", post);
         return "posts/show";
+
     }
 
-    @RequestMapping(path = "/posts/create", method = RequestMethod.GET)
+    @GetMapping("/posts/save")
+    @ResponseBody
+    public String savePost(){
+        Post newPost= new Post();
+        newPost.setTitle("New post");
+        newPost.setBody("Nonsense");
+        postDao.save(newPost);
+        return "Saving post";
+    }
+
+    @GetMapping("/posts/edit")
+    @ResponseBody
+    public String editPost(){
+        Post post = postDao.getOne(1L);
+        post.setTitle("Updated Title!");
+        postDao.save(post);
+        return "Updating post";
+    }
+
+    @PostMapping("/posts/{id}/delete")
+    public String deletePost(@PathVariable long id){
+        Post post = postDao.findById(id);
+        postDao.delete(post);
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/posts/search")
+    public String searchPost(Model model){
+        Post post = postDao.findByTitle("foreground");
+        model.addAttribute(post);
+        return "posts/search";
+    }
+
+    @GetMapping("/posts/create")
     @ResponseBody
     public String createForm() {
         return "view the form for creating a post";
