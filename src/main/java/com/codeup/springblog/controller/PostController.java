@@ -1,45 +1,95 @@
+
 package com.codeup.springblog.controller;
 
+import com.codeup.springblog.EmailService;
 import com.codeup.springblog.model.Post;
+import com.codeup.springblog.model.User;
+import com.codeup.springblog.repositiories.PostRepo;
+import com.codeup.springblog.repositiories.UserRepository;
+import org.hibernate.service.spi.InjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.model.IModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class PostController {
+
+    private PostRepo postDao;
+    private UserRepository userDao;
+    private final EmailService emailService;
+
+    public PostController(PostRepo postDao, UserRepository userDao, EmailService emailService) {
+        this.postDao = postDao;
+        this.userDao = userDao;
+        this.emailService = emailService;
+    }
+
     @GetMapping("/posts")
     public String posts(Model model) {
         model.addAttribute("title", "View All Posts");
-        ArrayList<Post> posts = new ArrayList<>();
-        posts.add(new Post(1, "This is a title", "Feeling hungry"));
-        posts.add(new Post(2, "This is a thoughtful title", "Do spiders get grossed out by humans?"));
-        model.addAttribute("posts", posts);
+        List<Post> post = postDao.findAll();
+        model.addAttribute("posts", post);
         return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
     public String post(Model model, @PathVariable long id) {
         model.addAttribute("title", "View Post");
-
-        Post thisPost = new Post(id, "This is a single post", "Dogs are the best creatures on planet Earth!!!");
-        model.addAttribute("postId", thisPost.getId());
-        model.addAttribute("postTitle", thisPost.getTitle());
-        model.addAttribute("postBody", thisPost.getBody());
+        Post post = postDao.findById(id);
+        User user = userDao.findById(1L);
+        model.addAttribute("post", post);
+        model.addAttribute("user", user);
         return "posts/show";
+
     }
 
-    @RequestMapping(path = "/posts/create", method = RequestMethod.GET)
-    @ResponseBody
-    public String createForm() {
-        return "view the form for creating a post";
+    @GetMapping("/posts/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("post", new Post());
+        return "posts/create";
     }
 
     @PostMapping("/posts/create")
-    @ResponseBody
-    public String create() {
-        return "create a new post";
+    public String postNewPost(@RequestParam String title, @RequestParam String body) {
+        Post post = new Post(title, body, userDao.findById(1L));
+        postDao.save(post);
+        emailService.prepareAndSend(post,"A new post has been created!", "You created a new post!");
+        return "redirect:/posts";
     }
+
+    @PostMapping("/posts/{id}/delete")
+    public String delete(@PathVariable long id){
+        postDao.deleteById(id);
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/posts/{id}/edit")
+    public String editForm(@PathVariable long id, Model model) {
+        Post postToEdit = postDao.getOne(id);
+        model.addAttribute("post", postToEdit);
+        return "posts/edit";
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    public String updatePost(@PathVariable long id, @RequestParam String title, @RequestParam String body) {
+        Post p = postDao.getOne(id);
+        p.setTitle(title);
+        p.setBody(body);
+        postDao.save(p);
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/posts/search")
+    public String searchPost(Model model){
+        Post post = postDao.findByTitle("foreground");
+        model.addAttribute(post);
+        return "posts/search";
+    }
+
 
 }

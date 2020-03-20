@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/header :: head">
-    <title>All Posts</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="partials/header :: header"></head>
 <body>
-<nav th:replace="partials/navbar :: navbar"/>
-<div th:each="post : ${posts}">
-    <h1 th:text="${post.getTitle()}" />
-    <p th:text="${post.getBody()}"/>
+<div class="wrapper">
+    <nav th:replace="partials/navbar :: navbar"></nav>
+    <main class="container">
+        <div th:each="post : ${posts}">
+            <a th:href="@{|/posts/${post.id}|}"><h1 th:text="${post.title}"></h1></a>
+            <p th:text="${post.body}"></p>
+            <a th:href="@{|/posts/${post.id}/edit|}">Edit Post</a>
+            <form th:action="@{|/posts/${post.id}/delete|}" th:method="POST">
+                <button>Delete Post</button>
+            </form>
+        </div>
+    </main>
 </div>
-<footer th:replace="partials/footer :: footer"/>
+<footer th:replace="partials/footer :: footer" />
 </body>
 </html>

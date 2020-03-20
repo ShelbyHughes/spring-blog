@@ -3,9 +3,16 @@
 <head th:replace="partials/header :: header"></head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
-<h1 th:text="${post.title}"></h1>
-<p th:text="${post.body}"></p>
-<p th:text="${user.email}"></p>
+<h1>Create Post</h1>
+<form th:action="@{/posts/create}" th:method="post" th:object="${post}">
+    Title:
+    <input th:field="*{title}" />
+    <br />
+    Body:
+    <input th:field="*{body}" />
+    <br />
+    <input type="submit" />
+</form>
 <footer th:replace="partials/footer :: footer" />
 </body>
 </html>
