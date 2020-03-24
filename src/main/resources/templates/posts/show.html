@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="partials/header :: header"></head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 <h1 th:text="${post.title}"></h1>
 <p th:text="${post.body}"></p>
-<p th:text="${user.email}"></p>
+<a th:href="'mailto:'+${post.user.email}"><span th:text="${post.user.email}"></span> </a>
+<br>
+<div sec:authorize="isAuthenticated()">
+    <div th:if="${username == post.user.username}">
+        <a th:href="@{|/posts/${post.id}/edit|}"><button>Edit Post</button></a>
+        <form th:action="@{|/posts/${post.id}/delete|}" th:method="POST" style="display:inline">
+            <button>Delete Post</button>
+        </form>
+    </div>
+</div>
 <footer th:replace="partials/footer :: footer" />
 </body>
 </html>

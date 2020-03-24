@@ -3,16 +3,41 @@
 <head th:replace="partials/header :: header"></head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
-<h1>Create Post</h1>
-<form th:action="@{/posts/create}" th:method="post" th:object="${post}">
-    Title:
-    <input th:field="*{title}" />
-    <br />
-    Body:
-    <input th:field="*{body}" />
-    <br />
-    <input type="submit" />
-</form>
+<div class="container">
+    <h1>Create Post</h1>
+    <form th:action="@{/posts/create}" th:method="post" th:object="${post}">
+        Title:
+        <input th:field="*{title}" />
+        <br />
+        Body:
+        <textarea th:field="*{body}" />
+        <br />
+        <input type="submit" />
+    </form>
+<!--    <h1>Create post!</h1>-->
+<!--    <form class="was-validated" th:action="@{/posts/create}" th:method="post" th:object="${post}">-->
+<!--        <div class="mb-3">-->
+<!--            <label for="validationServer05">Title</label>-->
+<!--            <input type="text" class="form-control is-invalid" id="validationServer05" required th:field="*{title}">-->
+<!--            <div class="invalid-feedback">-->
+<!--                Please provide a title.-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="validationTextarea">Body</label>-->
+<!--            <textarea class="form-control is-invalid" id="validationTextarea" placeholder="Body Message" required th:field="*{body}"></textarea>-->
+<!--            <div class="invalid-feedback">-->
+<!--                Please enter a body message.-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="custom-file">-->
+<!--            <input type="file" class="custom-file-input" id="validatedCustomFile" required>-->
+<!--            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>-->
+<!--            <div class="invalid-feedback">Invalid file</div>-->
+<!--        </div>-->
+<!--        <button class="btn btn-primary" type="submit">Submit form</button>-->
+<!--    </form>-->
+</div>
 <footer th:replace="partials/footer :: footer" />
 </body>
 </html>
